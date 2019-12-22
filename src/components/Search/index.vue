@@ -69,6 +69,7 @@ export default {
       // 2.
       // 用axios自带的
       var that = this;
+      var cityId = this.$store.state.city.id;
       this.cancelRequest();
       this.axios
         .get("/api/searchList?cityId=" + cityId + "&kw=" + newVal, {
