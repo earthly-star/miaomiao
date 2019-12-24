@@ -3,25 +3,25 @@
     <Loading v-if="isLoading" />
     <Scroller v-else>
       <ul>
-        <!-- <li>
-          <div class="pic_show">
+        <li>
+          <div class="pic_show" @tap="handleToDetail(1190122)">
             <img src="/images/1.jpg" />
           </div>
           <div class="info_list">
-            <h2>无名之辈</h2>
+            <h2 @tap="handleToDetail(1190122)">无名之辈</h2>
             <p><span class="person">123</span>人想看</p>
             <p>主演: 陈建斌,任素汐,潘斌龙</p>
             <p>2018-11-30上映</p>
           </div>
           <div class="btn_pre">预售</div>
-        </li>-->
+        </li>
 
         <li v-for="item in comingList" :key="item.id">
-          <div class="pic_show">
+          <div class="pic_show" @tap="handleToDetail(item.id)">
             <img :src="item.img | setWH('128.180')" />
           </div>
           <div class="info_list">
-            <h2>
+            <h2 @tap="handleToDetail(item.id)">
               {{ item.nm }}
               <img v-if="item.version" src="@/assets/maxs.png" alt />
             </h2>
@@ -63,6 +63,12 @@ export default {
         this.prevCityId = cityId;
       }
     });
+  },
+  methods: {
+    handleToDetail(movieId) {
+      console.log("handleToDetail");
+      this.$router.push("/movie/detail/2/" + movieId);
+    }
   }
 };
 </script>
