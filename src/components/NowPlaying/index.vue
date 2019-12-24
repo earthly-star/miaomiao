@@ -18,11 +18,11 @@
 
         <li class="pullDown">{{ pullDownMsg }}</li>
         <li v-for="item in movieList" :key="item.id">
-          <div class="pic_show" @tap="handleToDetail">
+          <div class="pic_show" @tap="handleToDetail(item.id)">
             <img :src="item.img | setWH('128.180')" />
           </div>
           <div class="info_list">
-            <h2>
+            <h2 @tap="handleToDetail(item.id)">
               {{ item.nm }}
               <img v-if="item.version" src="@/assets/maxs.png" alt />
             </h2>
@@ -92,8 +92,9 @@ export default {
     });
   },
   methods: {
-    handleToDetail() {
+    handleToDetail(movieId) {
       console.log("handleToDetail");
+      this.$router.push("/movie/detail/1/" + movieId);
     },
     handleToScroll(pos) {
       console.log("scroll");
@@ -102,17 +103,19 @@ export default {
       }
     },
     handleToTouchEnd(pos) {
-      console.log("touchEnd");
-      this.axios.get("/api/movieOnInfoList?cityId=11").then(res => {
-        var msg = res.data.msg;
-        if (msg === "ok") {
-          this.pullDownMsg = "更新成功";
-          setTimeout(() => {
-            this.movieList = res.data.data.movieList;
-            this.pullDownMsg = "";
-          }, 1000);
-        }
-      });
+      if( pos.y > 30 ){
+        console.log("touchEnd");
+        this.axios.get("/api/movieOnInfoList?cityId=11").then(res => {
+          var msg = res.data.msg;
+          if (msg === "ok") {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              this.movieList = res.data.data.movieList;
+              this.pullDownMsg = "";
+            }, 1000);
+          }
+        });
+      }
     }
   }
 };
