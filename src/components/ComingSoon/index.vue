@@ -3,6 +3,8 @@
     <Loading v-if="isLoading" />
     <Scroller v-else>
       <ul>
+
+        <li class="pullDown">{{ pullDownMsg }}</li>
         <li>
           <div class="pic_show" @tap="handleToDetail(1190122)">
             <img src="/images/1.jpg" />
@@ -16,6 +18,7 @@
           <div class="btn_pre">预售</div>
         </li>
 
+        <!-- <li class="pullDown">{{ pullDownMsg }}</li> -->
         <li v-for="item in comingList" :key="item.id">
           <div class="pic_show" @tap="handleToDetail(item.id)">
             <img :src="item.img | setWH('128.180')" />
@@ -44,7 +47,9 @@ export default {
   data() {
     return {
       comingList: [],
+      pullDownMsg: "",
       isLoading: true,
+      ispullDownRefresh: false,
       prevCityId: -1
     };
   },
@@ -68,6 +73,30 @@ export default {
     handleToDetail(movieId) {
       console.log("handleToDetail");
       this.$router.push("/movie/detail/2/" + movieId);
+    },
+    handleToScroll(pos) {
+      console.log("scroll");
+      if (pos.y > 30) {
+        this.ispullDownRefresh = true;
+        this.pullDownMsg = "正在更新中";
+      }
+    },
+    handleToTouchEnd(pos) {
+      if( pos.y > 30 && this.ispullDownRefresh){
+        this.ispullDownRefresh = false;
+        console.log("touchEnd");
+        this.axios.get("/api/movieComingList?cityId=11").then(res => {
+          var msg = res.data.msg;
+          if (msg === "ok") {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              this.comingList = res.data.data.comingList;
+              this.prevCityId = cityId;
+              this.pullDownMsg = "";
+            }, 1000);
+          }
+        });
+      }
     }
   }
 };

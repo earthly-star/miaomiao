@@ -50,6 +50,7 @@ export default {
       movieList: [],
       pullDownMsg: "",
       isLoading: true,
+      ispullDownRefresh: false,
       prevCityId: -1
     };
   },
@@ -59,7 +60,6 @@ export default {
       return;
     }
     this.isLoading = true;
-    console.log(123);
 
     this.axios.get("/api/movieOnInfoList?cityId=" + cityId).then(res => {
       var msg = res.data.msg;
@@ -99,11 +99,13 @@ export default {
     handleToScroll(pos) {
       console.log("scroll");
       if (pos.y > 30) {
+        this.ispullDownRefresh = true;
         this.pullDownMsg = "正在更新中";
       }
     },
     handleToTouchEnd(pos) {
-      if( pos.y > 30 ){
+      if( pos.y > 30 && this.ispullDownRefresh){
+        this.ispullDownRefresh = false;
         console.log("touchEnd");
         this.axios.get("/api/movieOnInfoList?cityId=11").then(res => {
           var msg = res.data.msg;

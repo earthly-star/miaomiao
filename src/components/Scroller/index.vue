@@ -34,7 +34,10 @@ export default {
 
     scroll.on('touchEnd',(pos) => {
       this.handleToTouchEnd(pos);
-    })
+    });
+  },
+  activated() {
+    this.scroll.refresh();
   },
   methods: {
     toScrollTop(y) {
